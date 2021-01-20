@@ -46,7 +46,9 @@ export default {
     };
   },
   methods: {
-    changeDificulty() {},
+    changeDificulty() {
+      this.$router.push('/settings')
+    },
     pauseGame() {},
   },
   computed: {
