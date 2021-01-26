@@ -1,13 +1,16 @@
-export const CELL_STATES = Object.freeze({
-    1: "mdi-numeric-1",
-    2: "mdi-numeric-2",
-    3: "mdi-numeric-3",
-    4: "mdi-numeric-4",
-    5: "mdi-numeric-5",
-    6: "mdi-numeric-6",
-    7: "mdi-numeric-7",
-    8: "mdi-numeric-8",
-    QUESTION: "mdi-help",
-    FLAG: "mdi-flag-triangle",
-    BOMB: "mdi-bomb"
+
+
+export const CELL_ICONS = Object.freeze({
+    0: {icon:'', color:'black'},
+    1: {icon:'mdi-numeric-1', color:'purple darken-4'},
+    2: {icon:'mdi-numeric-2', color:'deep-purple'},
+    3: {icon:'mdi-numeric-3', color:'indigo'},
+    4: {icon:'mdi-numeric-4', color:'indigo accent-2'},
+    5: {icon:'mdi-numeric-5', color:'teal darken-1'},
+    6: {icon:'mdi-numeric-6', color:'deep-orange darken-4'},
+    7: {icon:'mdi-numeric-7', color:'deep-orange accent-3'},
+    8: {icon:'mdi-numeric-8', color:'red accent-4'},
+    QUESTION: 'mdi-help',
+    FLAG: 'mdi-flag-triangle',
+    BOMB: 'mdi-bomb'
 })
