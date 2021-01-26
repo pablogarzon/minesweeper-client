@@ -63,22 +63,27 @@ export default {
       rows: 10,
       columns: 10,
       mines: 10,
-    }
+    };
   },
   methods: {
     play() {
-      this.$router.push('/game')
+      this.$store.dispatch("createGame", {
+        rows: this.rows,
+        columns: this.columns,
+        mines: this.mines
+      });
+      this.$router.push("/game");
     },
     cancel() {
-      this.$router.push('/game')
+      this.$router.push("/game");
     },
   },
   computed: {
     maxMines: function () {
-      return (this.rows * this.columns) / 2
+      return (this.rows * this.columns) / 2;
     },
   },
-}
+};
 </script>
 
 <style scoped>
