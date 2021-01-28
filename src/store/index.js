@@ -7,7 +7,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     gameId: 0,
-    gameState: GAME_STATES.NOT_STARTED.value,
+    gameState: GAME_STATES.NOT_STARTED,
     board: [],
     rows: 10,
     columns: 10,
@@ -15,6 +15,9 @@ export default new Vuex.Store({
     timer: 0
   },
   mutations: {
+    updateGameState (state, gameState) {
+      state.gameState = gameState
+    },
     setRows(state, rows) {
       state.rows = rows
     },
@@ -50,10 +53,37 @@ export default new Vuex.Store({
       context.commit('setColumns', payload.columns)
       context.commit('setMines', payload.mines)
     },
+    setGameStateToActive(context) {
+      context.commit('updateGameState', GAME_STATES.ACTIVE)
+  },
+    setGameStateToPause(context) {
+      context.commit('updateGameState', GAME_STATES.PAUSED)
+    },
     async uncoverCell(context, payload) {
       //mock expose
-      await context.commit('updateCell',{ coordinates:{ x: payload.coordinates.x, y: payload.coordinates.y}, state: 1, value: 4}
-      )
+      if (context.state.gameState == GAME_STATES.ACTIVE) {
+        context.commit('updateGameState', GAME_STATES.FAIL)
+        return
+      }
+      if (context.state.gameState == GAME_STATES.NOT_STARTED) {
+        context.commit('updateGameState', GAME_STATES.ACTIVE)
+      }
+      let response = [
+        { coordinates:{ x: payload.coordinates.x, y: payload.coordinates.y}, state: 1, value: 0},
+        { coordinates:{ x: 1, y: 3}, state: 1, value: 0},
+        { coordinates:{ x: 1, y: 4}, state: 1, value: 0},
+        { coordinates:{ x: 1, y: 2}, state: 1, value: 1},
+        { coordinates:{ x: 3, y: 2}, state: 1, value: 2},
+        { coordinates:{ x: 0, y: 1}, state: 1, value: 3},
+        { coordinates:{ x: 2, y: 2}, state: 1, value: 4},
+        { coordinates:{ x: 0, y: 0}, state: 1, value: 5},
+        { coordinates:{ x: 5, y: 6}, state: 1, value: 6},
+        { coordinates:{ x: 4, y: 7}, state: 1, value: 7},
+        { coordinates:{ x: 2, y: 3}, state: 1, value: 8}
+      ]
+      response.forEach(element => {
+        context.commit('updateCell', element)
+      })
     }
   },
   modules: {

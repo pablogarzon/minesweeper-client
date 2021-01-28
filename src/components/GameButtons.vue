@@ -38,6 +38,8 @@
 </template>
 
 <script lang="ts">
+import { GAME_STATES } from "../constants/gameStates";
+
 export default {
   data() {
     return {
@@ -47,22 +49,35 @@ export default {
   },
   methods: {
     changeDificulty() {
-      this.$router.push('/settings')
+      this.$router.push("/settings");
     },
-    pauseGame() {},
+    pauseGame() {
+      if (this.gameState === GAME_STATES.ACTIVE) {
+        this.$store.dispatch("setGameStateToPause");
+      } else {
+        this.$store.dispatch("setGameStateToActive");
+      }
+    },
   },
   computed: {
     gameState() {
-      return null;
+      return this.$store.state.gameState;
     },
     pauseGameButtonLabel() {
-      return this.activeLabel;
+      if (this.gameState === GAME_STATES.ACTIVE) {
+        return this.activeLabel;
+      } else {
+        return this.pausedLabel;
+      }
     },
     isNewGameDisabled() {
-      return false;
+      return this.gameState === GAME_STATES.NOT_STARTED;
     },
     isResumeGameDisabled() {
-      return false;
+      return (
+        this.gameState !== GAME_STATES.ACTIVE &&
+        this.gameState !== GAME_STATES.PAUSED
+      );
     },
   },
 };

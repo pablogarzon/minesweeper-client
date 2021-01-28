@@ -47,6 +47,9 @@ import Cell from "../components/Cell.vue";
 import Timer from "../components/Timer.vue";
 import GameButtons from "../components/GameButtons.vue";
 
+import { GAME_ICONS } from '../constants/gameIcons';
+import { GAME_STATES } from '../constants/gameStates';
+
 export default {
   name: "Game",
   components: {
@@ -56,10 +59,11 @@ export default {
   },
   computed: {
     icon() {
-      return "mdi-emoticon";
+      return GAME_ICONS[this.$store.state.gameState.name];
     },
     isBoardDisabled() {
-      return false;
+      return this.$store.state.gameState !== GAME_STATES.ACTIVE
+              && this.$store.state.gameState !== GAME_STATES.NOT_STARTED
     },
     rows() {
       return this.$store.state.rows;
