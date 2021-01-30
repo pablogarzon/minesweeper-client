@@ -7,6 +7,7 @@
         outlined
         style="min-width: 200px"
         :disabled="isNewGameDisabled"
+        @click="createNewGame"
       >
         New Game
       </v-btn>
@@ -45,42 +46,46 @@ export default {
     return {
       activeLabel: 'Pause Game',
       pausedLabel: 'Resume Game',
-    };
+    }
   },
   methods: {
+    createNewGame() {
+      this.$store.dispatch('createNewGameWithSameDimensions')
+    },
     changeDificulty() {
-      this.$router.push('/settings');
+      this.$store.dispatch('updateGameState', GAME_STATES.ABANDONED)
+      this.$router.push('/settings')
     },
     pauseGame() {
       if (this.gameState === GAME_STATES.ACTIVE) {
-        this.$store.dispatch('setGameStateToPause');
+        this.$store.dispatch('updateGameState', GAME_STATES.PAUSED)
       } else {
-        this.$store.dispatch('setGameStateToActive');
+        this.$store.dispatch('setGameStateToActive')
       }
     },
   },
   computed: {
     gameState() {
-      return this.$store.state.gameState;
+      return this.$store.state.gameState
     },
     pauseGameButtonLabel() {
       if (this.gameState === GAME_STATES.ACTIVE) {
-        return this.activeLabel;
+        return this.activeLabel
       } else {
-        return this.pausedLabel;
+        return this.pausedLabel
       }
     },
     isNewGameDisabled() {
-      return this.gameState === GAME_STATES.NOT_STARTED;
+      return this.gameState === GAME_STATES.NOT_STARTED
     },
     isResumeGameDisabled() {
       return (
         this.gameState !== GAME_STATES.ACTIVE &&
         this.gameState !== GAME_STATES.PAUSED
-      );
+      )
     },
   },
-};
+}
 </script>
 
 <style scoped>
