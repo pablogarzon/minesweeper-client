@@ -5,7 +5,6 @@
     outlined
     @click="uncover"
     @click.right="mark"
-    :disabled="isDisabled"
   >
     <v-icon large :color="icon.color">
       {{ icon.icon }}
@@ -14,29 +13,47 @@
 </template>
 
 <script lang="ts">
-import {CELL_ICONS} from '../constants/cellIcons'
+import { CELL_ICONS } from "../constants/cellIcons";
+import { CELL_STATES } from "../constants/cellStates";
 
 export default {
   name: "Cell",
   props: {
-      cell: {
-          type: Object
-      }
+    cell: {
+      type: Object,
+      required: true,
+    },
   },
   computed: {
     icon() {
-      return CELL_ICONS[this.cell.value]
-    },
-    isDisabled() {
-      return false
+      if (this.cell.state === CELL_STATES.UNCOVERED) {
+        return CELL_ICONS[this.cell.value];
+      }
+      if (this.cell.hasMine) {
+        return CELL_ICONS["MINE"];
+      }
+      return CELL_ICONS[this.cell.state.name];
     },
   },
   methods: {
     uncover() {
-        this.$store.dispatch('uncoverCell', this.cell)
+      if (this.cell.state === CELL_STATES.UNCOVERED) {
+        return;
+      }
+      this.$store.dispatch("uncoverCell", this.cell);
     },
     mark() {
-        return this.cell.value='FLAG'
+      if (this.cell.state === CELL_STATES.UNCOVERED) {
+        return;
+      }
+      if (this.cell.state === CELL_STATES.COVERED) {
+        this.cell.state = CELL_STATES.MARKED_WITH_FLAG;
+      } else if (this.cell.state === CELL_STATES.MARKED_WITH_FLAG) {
+        this.cell.state = CELL_STATES.MARKED_WITH_QUESTION;
+      } else {
+        this.cell.state = CELL_STATES.COVERED;
+      }
+      this.$store.dispatch("updateCellState", this.cell);
     },
   },
 };
@@ -47,6 +64,6 @@ export default {
   min-width: 54px;
 }
 .mw-cell {
-    padding: 8px !important;
+  padding: 8px !important;
 }
 </style>

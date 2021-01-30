@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { GAME_STATES } from '../constants/gameStates'
+import { CELL_STATES } from '../constants/cellStates'
 
 Vue.use(Vuex)
 
@@ -46,7 +47,7 @@ export default new Vuex.Store({
       for (let y = 0; y < payload.rows; y++) {
         let rowArr = []
         for (let x = 0; x < payload.columns; x++) {
-          rowArr.push({ id: x + "-" + y, coordinates: { x, y }, value: 0, state: 0 })
+          rowArr.push({ id: x + "-" + y, coordinates: { x, y }, value: 0, state: CELL_STATES.COVERED, hasMine: false })
         }
         board.push(rowArr)
       }
@@ -73,29 +74,32 @@ export default new Vuex.Store({
     async uncoverCell(context, payload) {
       //mock expose
       if (context.state.gameState == GAME_STATES.ACTIVE) {
-        context.dispatch("setGameStateToFail")
+        //context.dispatch("setGameStateToFail")
         return
       }
       if (context.state.gameState == GAME_STATES.NOT_STARTED) {
-        context.dispatch("setGameStateToActive")
+        context.dispatch('setGameStateToActive')
       }
       let response = [
-        { coordinates: { x: payload.coordinates.x, y: payload.coordinates.y }, state: 1, value: 0 },
-        { coordinates: { x: 1, y: 3 }, state: 1, value: 0 },
-        { coordinates: { x: 1, y: 4 }, state: 1, value: 0 },
-        { coordinates: { x: 1, y: 2 }, state: 1, value: 1 },
-        { coordinates: { x: 3, y: 2 }, state: 1, value: 2 },
-        { coordinates: { x: 0, y: 1 }, state: 1, value: 3 },
-        { coordinates: { x: 2, y: 2 }, state: 1, value: 4 },
-        { coordinates: { x: 0, y: 0 }, state: 1, value: 5 },
-        { coordinates: { x: 5, y: 6 }, state: 1, value: 6 },
-        { coordinates: { x: 4, y: 7 }, state: 1, value: 7 },
-        { coordinates: { x: 2, y: 3 }, state: 1, value: 8 }
+        { coordinates: { x: payload.coordinates.x, y: payload.coordinates.y }, state: CELL_STATES.UNCOVERED, value: 0, hasMine: false },
+        { coordinates: { x: 1, y: 3 }, state: CELL_STATES.UNCOVERED, value: 0, hasMine: false },
+        { coordinates: { x: 1, y: 4 }, state: CELL_STATES.UNCOVERED, value: 0, hasMine: true },
+        { coordinates: { x: 1, y: 2 }, state: CELL_STATES.UNCOVERED, value: 1, hasMine: false },
+        { coordinates: { x: 3, y: 2 }, state: CELL_STATES.UNCOVERED, value: 2, hasMine: false },
+        { coordinates: { x: 0, y: 1 }, state: CELL_STATES.UNCOVERED, value: 3, hasMine: false },
+        { coordinates: { x: 2, y: 2 }, state: CELL_STATES.UNCOVERED, value: 4, hasMine: false },
+        { coordinates: { x: 0, y: 0 }, state: CELL_STATES.UNCOVERED, value: 5, hasMine: false },
+        { coordinates: { x: 5, y: 6 }, state: CELL_STATES.UNCOVERED, value: 6, hasMine: false },
+        { coordinates: { x: 4, y: 7 }, state: CELL_STATES.UNCOVERED, value: 7, hasMine: false },
+        { coordinates: { x: 2, y: 3 }, state: CELL_STATES.UNCOVERED, value: 8, hasMine: false }
       ]
       response.forEach(element => {
         context.commit('updateCell', element)
       })
-    }
+    },
+    updateCellState(context, payload){
+      console.log('updateCellState', payload.state.name);
+    },
   },
   modules: {
   }
