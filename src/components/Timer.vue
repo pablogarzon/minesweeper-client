@@ -12,7 +12,7 @@ export default {
   computed: {
     label() {
       var date = new Date(0);
-      date.setSeconds(1000);
+      date.setSeconds(this.$store.state.time);
       return date.toISOString().substr(11, 8);
     },
   },

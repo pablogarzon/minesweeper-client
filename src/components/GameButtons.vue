@@ -38,24 +38,24 @@
 </template>
 
 <script lang="ts">
-import { GAME_STATES } from "../constants/gameStates";
+import { GAME_STATES } from '../constants/gameStates'
 
 export default {
   data() {
     return {
-      activeLabel: "Pause Game",
-      pausedLabel: "Resume Game",
+      activeLabel: 'Pause Game',
+      pausedLabel: 'Resume Game',
     };
   },
   methods: {
     changeDificulty() {
-      this.$router.push("/settings");
+      this.$router.push('/settings');
     },
     pauseGame() {
       if (this.gameState === GAME_STATES.ACTIVE) {
-        this.$store.dispatch("setGameStateToPause");
+        this.$store.dispatch('setGameStateToPause');
       } else {
-        this.$store.dispatch("setGameStateToActive");
+        this.$store.dispatch('setGameStateToActive');
       }
     },
   },
