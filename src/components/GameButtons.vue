@@ -53,14 +53,14 @@ export default {
       this.$store.dispatch('createNewGameWithSameDimensions')
     },
     changeDificulty() {
-      this.$store.dispatch('updateGameState', GAME_STATES.ABANDONED)
+      this.$store.dispatch('abandoneGame')
       this.$router.push('/settings')
     },
     pauseGame() {
       if (this.gameState === GAME_STATES.ACTIVE) {
-        this.$store.dispatch('updateGameState', GAME_STATES.PAUSED)
+        this.$store.dispatch('pauseGame')
       } else {
-        this.$store.dispatch('setGameStateToActive')
+        this.$store.dispatch('resumeGame')
       }
     },
   },

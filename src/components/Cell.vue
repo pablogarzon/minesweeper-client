@@ -5,6 +5,7 @@
     outlined
     @click="uncover"
     @click.right="mark"
+    :disabled="isDisabled"
   >
     <v-icon large :color="icon.color">
       {{ icon.icon }}
@@ -26,36 +27,39 @@ export default {
   },
   computed: {
     icon() {
-      if (this.cell.state === CELL_STATES.UNCOVERED) {
-        return CELL_ICONS[this.cell.value];
-      }
       if (this.cell.hasMine) {
-        return CELL_ICONS["MINE"];
+        return CELL_ICONS["MINE"]
       }
-      return CELL_ICONS[this.cell.state.name];
+      if (this.cell.state === CELL_STATES.UNCOVERED) {
+        return CELL_ICONS[this.cell.value]
+      }
+      return CELL_ICONS[this.cell.state.name]
     },
+    isDisabled() {
+      return this.cell.state === CELL_STATES.UNCOVERED
+    }
   },
   methods: {
     uncover() {
       if (this.cell.state === CELL_STATES.UNCOVERED) {
-        return;
+        return
       }
-      this.$store.dispatch("uncoverCell", this.cell);
+      this.$store.dispatch("uncoverCell", this.cell)
     },
     mark() {
       if (this.cell.state === CELL_STATES.UNCOVERED) {
-        return;
+        return
       }
       if (this.cell.state === CELL_STATES.COVERED) {
-        this.cell.state = CELL_STATES.MARKED_WITH_FLAG;
+        this.cell.state = CELL_STATES.MARKED_WITH_FLAG
       } else if (this.cell.state === CELL_STATES.MARKED_WITH_FLAG) {
-        this.cell.state = CELL_STATES.MARKED_WITH_QUESTION;
+        this.cell.state = CELL_STATES.MARKED_WITH_QUESTION
       } else {
-        this.cell.state = CELL_STATES.COVERED;
+        this.cell.state = CELL_STATES.COVERED
       }
-      this.$store.dispatch("updateCellState", this.cell);
-    },
-  },
+      this.$store.dispatch("updateCellState", this.cell)
+    }
+  }
 };
 </script>
 

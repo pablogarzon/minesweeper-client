@@ -9,8 +9,8 @@ import axios from "axios";
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 let config = {
-  // baseURL: process.env.baseURL || process.env.apiUrl || ""
-  // timeout: 60 * 1000, // Timeout
+  baseURL: process.env.baseURL || process.env.apiUrl || 'http://localhost:8081',
+  //timeout: 1000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
 };
 
@@ -18,11 +18,14 @@ const _axios = axios.create(config);
 
 _axios.interceptors.request.use(
   function(config) {
+    config.headers['Access-Control-Allow-Origin'] = '*'
+    config.headers['content-Type'] = 'application/json'
     // Do something before request is sent
     return config;
   },
   function(error) {
     // Do something with request error
+    console.log(error)
     return Promise.reject(error);
   }
 );
@@ -34,8 +37,14 @@ _axios.interceptors.response.use(
     return response;
   },
   function(error) {
-    // Do something with response error
-    return Promise.reject(error);
+    let err = null
+    if (error.code === 'ECONNABORTED') {
+      err = { exceptionType: 'ECONNABORTED', message: `can't connect with server at ${config.baseURL}` }
+    } else {
+      err = { status: error.response.status, data: error.response.data }
+    }
+    console.log(err)
+    return Promise.reject(err);
   }
 );
 

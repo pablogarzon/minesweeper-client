@@ -3,6 +3,6 @@ export const GAME_ICONS = Object.freeze({
     ACTIVE: "mdi-emoticon",
     PAUSED: "mdi-emoticon-neutral",
     VICTORY: "mdi-emoticon-cool",
-    FAIL: "mdi-emoticon-dead",
+    FAILED: "mdi-emoticon-dead",
     ABANDONED: "mdi-emoticon-dead"
 })
