@@ -16,6 +16,8 @@ const state = {
   mines: 10,
   time: 0,
   user: '',
+  userId: 0,
+  users: [],
   dialog: false
 }
 
@@ -50,7 +52,15 @@ const mutations = {
     state.board[cell.coordinates.y][cell.coordinates.x].hasMine = cell.hasMine
   },
   setUser(state, user) {
-    state.user = user
+    state.user = user.user
+    state.userId = user.userId
+  },
+  setUsers(state, users) {
+    state.users = users
+  },
+  addUser(state, user) {
+    console.log(user)
+    state.users.push(user)
   },
   setDialog(state, dialog) {
     state.dialog = dialog
@@ -74,7 +84,7 @@ const actions = {
       if (context.state.gameId !== 0) {
         context.dispatch('abandoneGame') 
       }
-      const body = { rows: payload.rows, columns: payload.columns, mines: payload.mines }
+      const body = { rows: payload.rows, columns: payload.columns, mines: payload.mines, userId: context.state.userId }
       const result = await Vue.axios.post('/game/create', body)
       context.commit('setGameId', result.data.gameId)
       context.commit('setGameState', GAME_STATES.NOT_STARTED)
@@ -95,7 +105,6 @@ const actions = {
     })
   },
   updateGameState(context, newGameState) {
-    console.log(newGameState)
     const previousState = context.state.gameState
     if (previousState === newGameState) {
       return
@@ -125,8 +134,8 @@ const actions = {
   },
   async uncoverCell(context, payload) {
     try {
-      const body = { coordinates: payload.coordinates, gameId: context.state.gameId }
-      const result = await Vue.axios.post(`/game/move`, body)
+      const body = { coordinates: payload.coordinates, gameId: context.state.gameId, time: context.state.time }
+      const result = await Vue.axios.post(`/game/uncoverCell`, body)
       result.data.uncoveredCells.forEach(element => {
         element.state = CELL_STATES.UNCOVERED
         context.commit('updateCell', element)
@@ -138,15 +147,23 @@ const actions = {
   },
   async updateCellState(context, payload) { //(context, payload) {
     const gameId = context.state.gameId
-    const body = {coordinates: payload.coordinates, state: payload.state.value }
+    const body = {coordinates: payload.coordinates, state: payload.state.name }
     await Vue.axios.patch(`/game/${gameId}/updateCell`, body)
   },
   changeUser(context, user) {
     context.commit('setUser', user)
   },
+  async getUsers(context) {
+    const result = await Vue.axios.get(`/users/`)
+    context.commit('setUsers', result.data)
+  },
+  async createUsers(context, user) {
+    const result = await Vue.axios.post(`/users/`, {user})
+    context.commit('addUser', result.data)
+  },
   showDialog(context, dialog) {
     context.commit('setDialog', dialog)
-  }
+  },
 }
 
 export default new Vuex.Store({

@@ -34,7 +34,6 @@
             </v-row>
             <v-row no-gutters class="mw-row">
               <GameButtons />
-              <UserStats />
             </v-row>
           </v-card>
         </v-row>
@@ -47,7 +46,6 @@
 import Cell from '../components/Cell.vue'
 import Timer from '../components/Timer.vue'
 import GameButtons from '../components/GameButtons.vue'
-import UserStats from '../components/UserStats.vue'
 
 import { GAME_ICONS } from '../constants/gameIcons'
 import { GAME_STATES } from '../constants/gameStates'
@@ -57,8 +55,7 @@ export default {
   components: {
     Cell,
     Timer,
-    GameButtons,
-    UserStats
+    GameButtons
   },
   computed: {
     icon() {
