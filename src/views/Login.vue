@@ -48,10 +48,10 @@ export default {
   methods: {
     play(e) {
       this.selectedItem = e.target.innerHTML
-      console.log("selected: ", e)
       if(this.selectedItem === '' || this.selectedItem.includes('<div')) {
           return
       }
+      this.$store.dispatch('changeUser', this.selectedItem)
       this.$router.push('/settings')
     },
     add() {

@@ -14,7 +14,8 @@ const state = {
   rows: 10,
   columns: 10,
   mines: 10,
-  time: 0
+  time: 0,
+  user: ''
 }
 
 const mutations = {
@@ -46,6 +47,9 @@ const mutations = {
     state.board[cell.coordinates.y][cell.coordinates.x].state = cell.state
     state.board[cell.coordinates.y][cell.coordinates.x].value = cell.value
     state.board[cell.coordinates.y][cell.coordinates.x].hasMine = cell.hasMine
+  },
+  setUser(state, user) {
+    state.user = user
   }
 }
 
@@ -129,6 +133,9 @@ const actions = {
     const gameId = context.state.gameId
     const body = {coordinates: payload.coordinates, state: payload.state.value }
     await Vue.axios.patch(`/game/${gameId}/updateCell`, body)
+  },
+  changeUser(context, user) {
+    context.commit('setUser', user)
   }
 }
 
