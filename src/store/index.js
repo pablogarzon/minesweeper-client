@@ -15,7 +15,8 @@ const state = {
   columns: 10,
   mines: 10,
   time: 0,
-  user: ''
+  user: '',
+  dialog: false
 }
 
 const mutations = {
@@ -50,6 +51,9 @@ const mutations = {
   },
   setUser(state, user) {
     state.user = user
+  },
+  setDialog(state, dialog) {
+    state.dialog = dialog
   }
 }
 
@@ -100,7 +104,10 @@ const actions = {
       interval = setInterval(() => context.commit('incrementTime'), 1000)
     } else {
       clearInterval(interval)
-      console.log("supuestamente frenado")
+    } 
+    if (newGameState === GAME_STATES.VICTORY) {
+      // call api to get user stats
+      context.dispatch('showDialog', true)
     }
     context.commit('setGameState', newGameState)
   },
@@ -136,6 +143,9 @@ const actions = {
   },
   changeUser(context, user) {
     context.commit('setUser', user)
+  },
+  showDialog(context, dialog) {
+    context.commit('setDialog', dialog)
   }
 }
 
