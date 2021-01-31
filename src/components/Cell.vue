@@ -5,7 +5,7 @@
     outlined
     @click="uncover"
     @click.right="mark"
-    :disabled="isDisabled"
+    :class="{ isUncovered: isUncovered }"
   >
     <v-icon large :color="icon.color">
       {{ icon.icon }}
@@ -35,7 +35,7 @@ export default {
       }
       return CELL_ICONS[this.cell.state.name]
     },
-    isDisabled() {
+    isUncovered() {
       return this.cell.state === CELL_STATES.UNCOVERED
     }
   },
@@ -66,8 +66,13 @@ export default {
 <style scoped>
 .v-btn:not(.v-btn--round).v-size--default {
   min-width: 54px;
+  min-height: 54px;
 }
 .mw-cell {
   padding: 8px !important;
+}
+
+.isUncovered {
+  background-color: #ECEFF1;
 }
 </style>

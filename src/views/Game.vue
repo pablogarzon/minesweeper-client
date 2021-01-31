@@ -75,7 +75,7 @@ export default {
       return this.$store.state.board;
     }
   },
-};
+}
 </script>
 
 <style scoped>
