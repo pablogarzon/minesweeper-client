@@ -63,6 +63,9 @@ const actions = {
   },
   async createGame(context, payload) {
     try {
+      if (context.state.gameId !== 0) {
+        context.dispatch('abandoneGame') 
+      }
       const body = { rows: payload.rows, columns: payload.columns, mines: payload.mines }
       const result = await Vue.axios.post('/game/create', body)
       context.commit('setGameId', result.data.gameId)
@@ -77,7 +80,6 @@ const actions = {
     }
   },
   async createNewGameWithSameDimensions(context) {
-    context.dispatch('abandoneGame')
     await context.dispatch('createGame', {
       rows: context.state.rows,
       columns: context.state.columns,
@@ -93,7 +95,6 @@ const actions = {
     if (newGameState === GAME_STATES.ACTIVE) {
       interval = setInterval(() => context.commit('incrementTime'), 1000)
     } else {
-      console.log("here")
       clearInterval(interval)
       console.log("supuestamente frenado")
     }

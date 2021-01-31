@@ -53,7 +53,6 @@ export default {
       this.$store.dispatch('createNewGameWithSameDimensions')
     },
     changeDificulty() {
-      this.$store.dispatch('abandoneGame')
       this.$router.push('/settings')
     },
     pauseGame() {
